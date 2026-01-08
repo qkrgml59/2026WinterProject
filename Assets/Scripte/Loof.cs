@@ -12,8 +12,8 @@ public class Loof : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(numbers.Length);                              //Length의 값이 나옴        ( 몇 개 인지 )
-        Debug.Log(names.Count);                                 //namge Count의 값이 나옴 
+        Debug.Log(numbers.Length);                              //Length의 값이 나옴        ( 5개라 5 )
+        Debug.Log(names.Count);                                 //namge Count의 값이 나옴   ( 3개라 3 )
         for (int i = 0; i < numbers.Length; i++)                   //number들이 지정되어 있으니 Length값 내에서 for문을 돌림
         {
             numbers[i] += 10;                                     //number값을 가져와 + 10을 함

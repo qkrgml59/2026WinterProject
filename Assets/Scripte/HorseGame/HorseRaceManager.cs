@@ -10,8 +10,24 @@ public class HorseRaceManager : MonoBehaviour
     [Header("말 오브젝트들")]
     public HorseView[] horseViews;                 //오브젝트
 
+    [Header("레이캐스트")]
+    public float maxDistance = 100f;
+    public LayerMask horseLayer;
+
+    [Header("버프")]
+    public float boostAmount = 1.0f;
+
     public List<Horse> horses = new List<Horse>();             //말을 List로 받아옴
     private bool raceFinished = false;                         //경기가 끝난 상태
+    private int selectedId = -1;
+    public int SelectedId => selectedId;
+
+    public Transform GetHorseTransform(int id)
+    {
+        if (horseViews == null) return null;
+        if (id < 0 || id >= horseViews.Length) return null;
+        return horseViews[id].transform;
+    }
 
     void Start()
     {
@@ -51,5 +67,49 @@ public class HorseRaceManager : MonoBehaviour
                 Debug.Log($"우승 : {h.name}");                       //먼저 도착한 말의 이름이 우승함.
             }
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            TrySelectHorse();
+        }
+
+        if(Input.GetKeyDown(KeyCode.B) && selectedId != -1)
+        {
+            horses[selectedId].speed += boostAmount;
+            Debug.Log($"버프! {horses[selectedId].name} speed = {horses[selectedId].speed:F2}");
+        }
+
+    }
+
+    void TrySelectHorse()
+    {
+        Camera cam = Camera.main;
+        if (cam == null) return;
+
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawRay(ray.origin, ray.direction * maxDistance, Color.cyan, 1f);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, horseLayer))
+        {
+            HorseView view = hit.collider.GetComponent<HorseView>();
+            if(view !=null)
+            {
+                Select(view.horseId);
+                    return;
+            }
+        }
+
+        Select(-1);
+    }
+
+    void Select(int id)
+    {
+        selectedId = id;
+
+        for(int i = 0; i < horseViews.Length; i++)
+        {
+            horseViews[i].SetSelected(i == selectedId);
+        }
+        Debug.Log(selectedId == -1 ? "선택 해제" : $"선택 : {horses[selectedId].name}");
     }
 }

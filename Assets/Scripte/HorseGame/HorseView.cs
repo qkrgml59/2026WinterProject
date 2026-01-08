@@ -19,4 +19,18 @@ public class HorseView : MonoBehaviour
         //transform.position = x => 이는 유니티에서 막아뒀음.
         //그래서 x를 따로 빼내서 선언했음.
     }
+
+    public void SetSelected(bool selected)
+    {
+        transform.localScale = selected ? Vector3.one * 1.2f : Vector3.one;
+
+        //if(selected == true)
+        //{
+        //    transform.localScale = Vector3.one * 1.2f;
+        //}
+        //if(selected == false)
+        //{
+        //    transform.localScale = Vector3.one;
+        //}
+    }
 }

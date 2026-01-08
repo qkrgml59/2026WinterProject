@@ -119,6 +119,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &219391536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 219391538}
+  - component: {fileID: 219391537}
+  m_Layer: 0
+  m_Name: RaycastBasics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &219391537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219391536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b715c1ddc918a740b014d447a51d92e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RaycastBasics
+  maxDistance: 100
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!4 &219391538
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219391536}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.94195, y: 1.098, z: 0.40382}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,7 +317,7 @@ GameObject:
   - component: {fileID: 363039782}
   - component: {fileID: 363039781}
   - component: {fileID: 363039780}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -397,7 +445,7 @@ GameObject:
   - component: {fileID: 388302475}
   - component: {fileID: 388302474}
   - component: {fileID: 388302473}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -699,7 +747,7 @@ GameObject:
   - component: {fileID: 1050259843}
   - component: {fileID: 1050259842}
   - component: {fileID: 1050259841}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -846,6 +894,11 @@ MonoBehaviour:
   - {fileID: 388302473}
   - {fileID: 1050259841}
   - {fileID: 363039780}
+  maxDistance: 100
+  horseLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  boostAmount: 1
   horses: []
 --- !u!4 &1257737037
 Transform:
@@ -923,3 +976,4 @@ SceneRoots:
   - {fileID: 388302477}
   - {fileID: 1050259845}
   - {fileID: 363039784}
+  - {fileID: 219391538}
