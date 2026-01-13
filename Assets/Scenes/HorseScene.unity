@@ -897,7 +897,7 @@ MonoBehaviour:
   maxDistance: 100
   horseLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   boostAmount: 1
   horses: []
 --- !u!4 &1257737037

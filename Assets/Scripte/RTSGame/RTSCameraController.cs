@@ -17,7 +17,7 @@ public class RTSCameraController : MonoBehaviour
         //W A S D로 이동
 
         float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vectical");
+        float v = Input.GetAxisRaw("Vertical");
         move += new Vector3(h, 0, v);    //이동했을 때 (h,0,v)로 새 위치값 생성
 
         //Edge Scrooling
