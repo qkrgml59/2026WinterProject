@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
@@ -12,6 +13,7 @@ public class RTSGameManager : MonoBehaviour
     public float maxDistance = 100f;
     public LayerMask unitLayer;          //유닛 레이어
     public LayerMask groundLayer;        //바닥 레이어
+    public LayerMask enemyLayer; // 추가
 
     [Header("라인")]
     public LineRenderer line;            //라인
@@ -25,6 +27,7 @@ public class RTSGameManager : MonoBehaviour
     private int selectedId = -1;     //선택된 유닛 번호
     private bool hasTarget;          //선택 됐는가 확인
     private Vector3 targetPos;       //선택된 유닛 위치
+    private EnemyView currentEnemyTarget; //전투 타겟
     private bool moveFinished = false;
 
     public int SelectedId => selectedId;       //public 변경
@@ -51,6 +54,22 @@ public class RTSGameManager : MonoBehaviour
         units.Add(new UnitData("Beta", 5f));
         units.Add(new UnitData("Gamma", 3.5f));
 
+        // (선택) 유닛마다 HP/스탯 초기화
+        for (int i = 0; i < units.Count; i++)
+        {
+            units[i].hp = units[i].maxHp;
+            units[i].attackTimer = 0f;
+        }
+
+        for (int i = 0; i < unitViews.Length; i++)
+            unitViews[i].unitId = i;
+
+        if (line != null)
+        {
+            line.positionCount = 2;
+            line.enabled = false;
+        }
+
         //뷰에 ID 부여
         for (int i = 0; i < unitViews.Length; i++)      //i 가 유닛오브젝트 길이보다 작을 때 
         {
@@ -68,21 +87,25 @@ public class RTSGameManager : MonoBehaviour
     void Update()
     {
         if (moveFinished) return;      //도착지에 닿았는지 초기화 
-
-        if (Input.GetMouseButtonDown(0))        //좌클릭시 HandleUnitSelection 호출
+        if(Input.GetMouseButtonDown(0))
         {
             HandleUnitSelection();
         }
-
-        if(Input.GetMouseButtonDown(1))         //우클릭시 HandleMoveCommand 호출
+        
+        
+        HandleRightClickCommand();    // 이번 과제 TODO
+        if(Input.GetMouseButtonDown(1))
         {
             HandleMoveCommand();
         }
+        UpdateCombat();               // 이번 과제 TODO
 
         UpdateMovement();
         UpdateLine();
 
-        
+        UpdateInspectorDebug();       // 이번 과제 TODO
+
+
 
         //for (int i = 0; i < units.Count; i++)                //units.Count가 i 보다 작을 때
         //{
@@ -122,8 +145,50 @@ public class RTSGameManager : MonoBehaviour
             Select(-1);
         
 
-        
+
     }
+    // 2) 우클릭 명령 확장 (이번 과제)
+    void HandleRightClickCommand()
+    {
+        // TODO:
+        // 1) 우클릭이 아니면 return
+        if (!Input.GetMouseButtonDown(1)) return;
+        // 2) 선택된 유닛이 없으면 return
+        if (selectedId == -1) return;
+
+        // 3) Raycast를 쏴서 "enemyLayer"를 먼저 검사
+
+        Camera cam = Camera.main;          //카메라 설정
+        if (cam == null) return;          //카메라가 없으면 리턴한다.
+
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);         //Ray를 카메라 기준으로 마우스 포지션에 위치한 곳을 쏘아준다.
+        Debug.DrawRay(ray.origin, ray.direction * maxDistance, Color.green, 1f);      //ray, raydirection과 최대 값을 계산하고 색은 초록색
+
+        if (Physics.Raycast(ray, out RaycastHit ehit, maxDistance, enemyLayer))   //만약 쏜 곳이 enemyLayer이라면
+        {
+            currentEnemyTarget = ehit.collider.GetComponent<EnemyView>();           //currentEnemyTarget은 EnemyView 오브젝트
+            hasTarget = false; //hasTarget 끄기
+            return;
+        }
+        //    - 맞으면 currentEnemyTarget 지정(EnemyView)
+        //    - 이동 목표(hasTarget)는 끄거나 유지 여부는 선택(권장: 끄기)
+
+
+        // 4) enemy가 안 맞으면 "groundLayer" 검사
+        //    - 맞으면 이동 목표 설정(hasTarget/targetPos)
+        //    - currentEnemyTarget은 해제(권장)
+
+        else if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, groundLayer))       //혹은 바닥을 눌렀다면
+        {
+            currentEnemyTarget = null;       //currentEnemyTarget 끄기
+            units[selectedId].targetPos = hit.point;     //유닛의 목표 위치가 hit.point
+            units[selectedId].isMoving = true;           //유닛은 무빙 상태
+            hasTarget = true;                            //hasTarget = true;
+
+        }
+
+    }
+
 
     //이동 명령 (우클릭)
     void HandleMoveCommand()           
@@ -146,9 +211,10 @@ public class RTSGameManager : MonoBehaviour
             hasTarget = true;                            //유닛이 선택됐는가?는 투르
         }
 
-
     }
-    
+
+
+
     //이동 처리
     //이동 처리에 MoveTowards를 써야하는데 우클릭에 쓴 나.
     void UpdateMovement()
@@ -191,11 +257,50 @@ public class RTSGameManager : MonoBehaviour
 
                 unitViewtransform.position = new Vector3(unitViewtransform.position.x, 0.5f, unitViewtransform.position.z);
             }
-
-
-
         }
 
+
+    }
+    // 4) 전투 처리 (이번 과제)
+    // 조건:
+    // - 유닛 선택됨
+    // - currentEnemyTarget != null
+    // - 타겟이 살아있음(활성 or hp>0)
+    // - 거리 <= attackRange
+    // - attackTimer 누적 후 cooldown 도달 시 공격
+    void UpdateCombat()
+    {
+        // TODO:
+        // 1) 선택된 유닛 없으면 return
+        if (selectedId == -1) return;
+        // 2) currentEnemyTarget이 없으면 return
+        if (currentEnemyTarget == null) return;
+        // 3) 타겟이 죽었거나 비활성이면 타겟 해제 후 return
+        if (currentEnemyTarget.maxHp < 0 && currentEnemyTarget.gameObject.activeSelf == false)            //gameObject.activeSelf => 오브젝트가 활성 됐는가 아닌가 
+        {
+            currentEnemyTarget = null;
+            return;
+        }
+        // 4) 거리 체크( Vector3.Distance )
+        float dist = Vector3.Distance(unitViews[selectedId].transform.position, currentEnemyTarget.transform.position);    //유닛의 위치와 적의 위치 거리 체크
+
+        // 5) 쿨타임 타이머 누적( Time.deltaTime )
+        units[selectedId].attackTimer += Time.deltaTime;               //유닛의 어택 Timer를 계산     
+        // 6) 쿨타임 되면:
+        //    - currentEnemyTarget.TakeDamage(attackDamage)
+        //    - timer = 0
+        //    - 타겟이 죽었으면 타겟 해제
+        if (units[selectedId].attackTimer > units[selectedId].attackCooldown)           //만약 내부 쿨타임이 유닛의 공격 쿨타임보다 크면
+        {
+            currentEnemyTarget.TakeDamage(units[selectedId].attackDamage);        //적을 타격한다 적은 데미지를 받는다 (유닛의 공격력 만큼)
+            units[selectedId].attackTimer = 0;                                    //그리고 유닛의 내부 쿨타임은 0이 된다. 쿨타임에 맞춰 공격
+
+            if(currentEnemyTarget.hp <= 0 && currentEnemyTarget.maxHp <= 0)                   //  hp가 <=0이면,
+            {
+                currentEnemyTarget.IsDead();                                     //적은 사망 상태가 되고
+                currentEnemyTarget = null;                                      //타겟이 죽었으면 해제
+            }
+        }
     }
 
     //라인 업데이트
@@ -251,6 +356,20 @@ public class RTSGameManager : MonoBehaviour
 
     }
 
+    void UpdateInspectorDebug()
+    {
+        // TODO:
+        // for문으로 모든 unitViews를 돌면서
+        for (int i = 0; i < unitViews.Length; i++)
+        {
+            UnitData unit = units[i];    //유닛 데이터의 unit = units[i]
+            RTSUnitView unitView = unitViews[i];    //RTSUnitView unitView = unitViews[i]
+
+            // units[i]의 name, hp, maxHp를 view.SetDebug(...)로 넣기
+            unitView.SetDebug(units[i].name, units[i].hp, units[i].maxHp);       //오브젝트의 이름, 체력, 최대 체력을 디버그에 확인
+        }
+        
+    }
     //선택처리
     void Select(int id)
     {
