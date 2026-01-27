@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class UnitBase : MonoBehaviour, IDamageable
+public abstract class UnitBase : MonoBehaviour, IDamageable 
 {
     [Header("Team/HP")]
     [SerializeField] int teamId = 0;
@@ -10,10 +10,10 @@ public abstract class UnitBase : MonoBehaviour, IDamageable
 
     [Header("Auto Battle")]
     [SerializeField] float searchRadius = 20f;
-    [SerializeField] float attackRange = 6f;
-    [SerializeField] float  moveSpeed = 3f;
-    [SerializeField] float attackCooldown = 0.8f;
-    float atkTimer;
+    [SerializeField] protected float attackRange = 6f;
+    [SerializeField] protected float  moveSpeed = 3f;
+    [SerializeField] protected float attackCooldown = 0.8f;
+    protected float atkTimer;
 
     protected IDamageable target;
 
@@ -61,7 +61,7 @@ public abstract class UnitBase : MonoBehaviour, IDamageable
         if (hp <= 0) Destroy(gameObject);
     }
 
-    IDamageable FindNearestEnemy()
+    protected IDamageable FindNearestEnemy()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, searchRadius);
         float best = float.PositiveInfinity;
