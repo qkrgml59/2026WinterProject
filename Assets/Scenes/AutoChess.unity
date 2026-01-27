@@ -158,6 +158,8 @@ MonoBehaviour:
   moveSpeed: 3
   attackCooldown: 0.8
   damage: 12
+  critChance: 0.2
+  critMultiplier: 2
 --- !u!136 &78855374
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -247,7 +249,7 @@ Transform:
   m_GameObject: {fileID: 78855372}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.46, y: 0.14097, z: -1.22226}
+  m_LocalPosition: {x: 6.46, y: 0.14097, z: -20.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -419,6 +421,8 @@ MonoBehaviour:
   moveSpeed: 3
   attackCooldown: 0.8
   damage: 12
+  critChance: 0.2
+  critMultiplier: 2
 --- !u!136 &241503666
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -508,7 +512,7 @@ Transform:
   m_GameObject: {fileID: 241503664}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.26, y: 0.14097, z: -1.22226}
+  m_LocalPosition: {x: -3.26, y: 0.14097, z: -20.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -553,6 +557,8 @@ MonoBehaviour:
   moveSpeed: 3
   attackCooldown: 0.8
   damage: 12
+  critChance: 0.2
+  critMultiplier: 2
 --- !u!136 &660281774
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -642,7 +648,7 @@ Transform:
   m_GameObject: {fileID: 660281772}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.1, y: 0.64522, z: -7.27}
+  m_LocalPosition: {x: -2.1, y: 0.64522, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -778,13 +784,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 961739749}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -21.4, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &981451843
 GameObject:
   m_ObjectHideFlags: 0
@@ -824,6 +830,8 @@ MonoBehaviour:
   moveSpeed: 3
   attackCooldown: 0.8
   damage: 12
+  critChance: 0.2
+  critMultiplier: 2
 --- !u!136 &981451845
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -913,7 +921,7 @@ Transform:
   m_GameObject: {fileID: 981451843}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.91, y: 0.14097, z: -1.22226}
+  m_LocalPosition: {x: 2.91, y: 0.14097, z: -20.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -958,6 +966,8 @@ MonoBehaviour:
   moveSpeed: 3
   attackCooldown: 0.8
   damage: 12
+  critChance: 0.2
+  critMultiplier: 2
 --- !u!136 &1167471398
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1047,7 +1057,7 @@ Transform:
   m_GameObject: {fileID: 1167471396}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.1, y: 0.64522, z: 0.53}
+  m_LocalPosition: {x: 8.15, y: 0.64522, z: 0.53}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1092,6 +1102,8 @@ MonoBehaviour:
   moveSpeed: 3
   attackCooldown: 0.8
   damage: 12
+  critChance: 0.2
+  critMultiplier: 2
 --- !u!136 &1353486414
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1181,7 +1193,7 @@ Transform:
   m_GameObject: {fileID: 1353486412}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.81, y: 0.64522, z: -9.76}
+  m_LocalPosition: {x: 4.81, y: 0.64522, z: 0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1226,6 +1238,8 @@ MonoBehaviour:
   moveSpeed: 3
   attackCooldown: 0.8
   damage: 12
+  critChance: 0.2
+  critMultiplier: 2
 --- !u!136 &1892167791
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1315,7 +1329,7 @@ Transform:
   m_GameObject: {fileID: 1892167789}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.49485, y: 0.14097, z: -1.22226}
+  m_LocalPosition: {x: 0.49485, y: 0.14097, z: -20.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1360,6 +1374,8 @@ MonoBehaviour:
   moveSpeed: 3
   attackCooldown: 0.8
   damage: 12
+  critChance: 0.2
+  critMultiplier: 2
 --- !u!136 &2118032462
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1449,7 +1465,7 @@ Transform:
   m_GameObject: {fileID: 2118032460}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.15, y: 0.64522, z: 5.93}
+  m_LocalPosition: {x: -7.15, y: 0.64522, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
